@@ -31,7 +31,7 @@ namespace ApiCatalogoJogos
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped<IJogoService, JogoService>();
-            services.AddScoped<IJogoRepository, JogoSqlServerRepository>();
+            services.AddScoped<IJogoRepository, JogoRepository>();
 
             #region CicloDeVida
 
