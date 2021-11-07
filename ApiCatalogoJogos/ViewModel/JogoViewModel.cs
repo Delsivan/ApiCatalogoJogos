@@ -12,4 +12,5 @@ namespace ApiCatalogoJogos.ViewModel
         public string Produtora { get; set; }
         public double Preco { get; set; }
     }
+
 }

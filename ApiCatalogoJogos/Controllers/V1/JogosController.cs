@@ -1,4 +1,5 @@
-﻿using ApiCatalogoJogos.InputModel;
+﻿using ApiCatalogoJogos.Exceptions;
+using ApiCatalogoJogos.InputModel;
 using ApiCatalogoJogos.Services;
 using ApiCatalogoJogos.ViewModel;
 using Microsoft.AspNetCore.Mvc;
@@ -22,11 +23,11 @@ namespace ApiCatalogoJogos.Controllers.V1
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<JogosController>>> Obter([FromQuery, Range(1, int.MaxValue)] int pagina = 1, [FromQuery, Range(1, 50)] int quantidade = 5)
+        public async Task<ActionResult<IEnumerable<JogoViewModel>>> Obter([FromQuery, Range(1, int.MaxValue)] int pagina = 1, [FromQuery, Range(1, 50)] int quantidade = 5)
         {
             var jogos = await _jogoService.Obter(pagina, quantidade);
 
-            if (jogos.Count() == 0)
+            if (jogos.Count == 0)
                 return NoContent();
 
             return Ok(jogos);
@@ -50,8 +51,7 @@ namespace ApiCatalogoJogos.Controllers.V1
                 var jogo = await _jogoService.Inserir(jogoInputModel);
                 return Ok(jogo);
             }
-            //catch (JogoJaCadastradoException ex)
-            catch (Exception ex)
+            catch (JogoJaCadastradoException ex)
             {
                 return UnprocessableEntity("Já existe um jogo com este nome para esta produtora");
             }
@@ -67,8 +67,7 @@ namespace ApiCatalogoJogos.Controllers.V1
 
                 return Ok();
             }
-            //catch (JogoNaoCadastradoException ex)
-            catch (Exception ex)
+            catch (JogoNaoCadastradoException ex)
             {
                 return NotFound("Não existe este jogo");
             }
@@ -83,8 +82,7 @@ namespace ApiCatalogoJogos.Controllers.V1
 
                 return Ok();
             }
-            //catch (JogoNaoCadastradoException ex)
-            catch (Exception ex)
+            catch (JogoNaoCadastradoException ex)
             {
                 return NotFound("Não existe este jogo");
             }
@@ -98,14 +96,10 @@ namespace ApiCatalogoJogos.Controllers.V1
                 await _jogoService.Remover(idJogo);
                 return Ok();
             }
-            //catch (jogoNaoCadastradoException ex)
-            catch (Exception ex)
+            catch (JogoNaoCadastradoException ex)
             {
                 return NotFound("Não existe este jogo");
             }
-            
         }
-
-
     }
 }
